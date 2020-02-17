@@ -12,6 +12,12 @@ module.exports = (err, req, res, next) => {
   } else if (err.msg === 'Invalid Username, Email, or Password') {
     status = 400
     errObj.msg = err.msg
+  } else if (err.type === 'not login') {
+    status = 403
+    errObj.msg = "This page can only be accessed by registered users, please login first"
+  } else if (err.type === 'not authorized') {
+    status = 401
+    errObj.msg = "Sorry, you're not authorized"
   }
 
   res
