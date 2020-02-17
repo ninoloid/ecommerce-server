@@ -39,10 +39,10 @@ describe('Product Routes', () => {
   })
 
   afterAll((done) => {
-    // queryInterface.bulkDelete('Products')
-    // .then(response => {
-    //   done()
-    // }).catch(err => done(err))
+    queryInterface.bulkDelete('Products')
+      .then(response => {
+        done()
+      }).catch(err => done(err))
 
     queryInterface.bulkDelete('Users')
       .then(response => {
@@ -413,6 +413,7 @@ describe('Product Routes', () => {
   })
 
   describe('Delete Product', () => {
+
     describe('Product deleted successfully', () => {
       test('Should return status 200 and delete product by ID)', (done) => {
         request(app)
@@ -454,7 +455,7 @@ describe('Product Routes', () => {
           })
       })
     })
-  })
 
+  })
   // END OF PRODUCT ROUTES TEST
 })
