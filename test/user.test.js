@@ -6,7 +6,7 @@ const { queryInterface } = sequelize
 describe('User Routes', () => {
 
   afterAll((done) => {
-    queryInterface.bulkDelete('Users', {})
+    queryInterface.bulkDelete('Users')
       .then(response => {
         done()
       }).catch(err => done(err))
@@ -15,7 +15,7 @@ describe('User Routes', () => {
   describe('User Register', () => {
 
     describe('User registered successfully', () => {
-      test('Should return status 201 and user data (token & username)', (done) => {
+      test('Should return status 201 and user data (token & username', (done) => {
         request(app)
           .post('/register')
           .send({
@@ -36,7 +36,7 @@ describe('User Routes', () => {
     })
 
     describe('User failed to register', () => {
-      test('Should return status 400 and validation error on username length (less than 6 characters)', (done) => {
+      test('Should return status 400 and validation error on username length (less than 6 characters', (done) => {
         request(app)
           .post('/register')
           .send({
@@ -55,7 +55,7 @@ describe('User Routes', () => {
           })
       })
 
-      test('Should return status 400 and validation error on email length (less than 10 characters)', (done) => {
+      test('Should return status 400 and validation error on email length (less than 10 characters', (done) => {
         request(app)
           .post('/register')
           .send({
@@ -74,7 +74,7 @@ describe('User Routes', () => {
           })
       })
 
-      test('Should return status 400 and validation error on password length (less than 6 characters)', (done) => {
+      test('Should return status 400 and validation error on password length (less than 6 characters', (done) => {
         request(app)
           .post('/register')
           .send({
@@ -93,7 +93,7 @@ describe('User Routes', () => {
           })
       })
 
-      test('Should return status 400 and validation error on username (username cannot be empty)', (done) => {
+      test('Should return status 400 and validation error on username (username cannot be empty', (done) => {
         request(app)
           .post('/register')
           .send({
@@ -111,7 +111,7 @@ describe('User Routes', () => {
           })
       })
 
-      test('Should return status 400 and validation error on email (email cannot be empty)', (done) => {
+      test('Should return status 400 and validation error on email (email cannot be empty', (done) => {
         request(app)
           .post('/register')
           .send({
@@ -129,7 +129,7 @@ describe('User Routes', () => {
           })
       })
 
-      test('Should return status 400 and validation error on password (password cannot be empty)', (done) => {
+      test('Should return status 400 and validation error on password (password cannot be empty', (done) => {
         request(app)
           .post('/register')
           .send({
@@ -147,7 +147,7 @@ describe('User Routes', () => {
           })
       })
 
-      test('Should return status 400 and validation error on username (username already registered)', (done) => {
+      test('Should return status 400 and validation error on username (username already registered', (done) => {
         request(app)
           .post('/register')
           .send({
@@ -166,7 +166,7 @@ describe('User Routes', () => {
           })
       })
 
-      test('Should return status 400 and validation error on email (email already registered)', (done) => {
+      test('Should return status 400 and validation error on email (email already registered', (done) => {
         request(app)
           .post('/register')
           .send({
@@ -185,7 +185,7 @@ describe('User Routes', () => {
           })
       })
 
-      test('Should return status 400 and validation error on email (invalid email format)', (done) => {
+      test('Should return status 400 and validation error on email (invalid email format', (done) => {
         request(app)
           .post('/register')
           .send({
@@ -210,7 +210,7 @@ describe('User Routes', () => {
   describe('User Login', () => {
 
     describe('User logged in successfully', () => {
-      test('Should return status 200 and user data (token & username)', (done) => {
+      test('Should return status 200 and user data (token & username', (done) => {
         request(app)
           .post('/login')
           .send({
@@ -229,7 +229,7 @@ describe('User Routes', () => {
     })
 
     describe('User failed to login', () => {
-      test('On invalid identification (username or email), return status 400 and error response (invalid username, email, or password)', (done) => {
+      test('On invalid identification (username or email), return status 400 and error response (invalid username, email, or password', (done) => {
         request(app)
           .post('/login')
           .send({
@@ -245,7 +245,7 @@ describe('User Routes', () => {
           })
       })
 
-      test('On invalid password, return status 400 and error response (invalid username, email, or password)', (done) => {
+      test('On invalid password, return status 400 and error response (invalid username, email, or password', (done) => {
         request(app)
           .post('/login')
           .send({

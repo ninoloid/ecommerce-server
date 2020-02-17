@@ -2,7 +2,7 @@
 module.exports = (sequelize, DataTypes) => {
   class Product extends sequelize.Sequelize.Model {
     static associate(models) {
-      // associations
+      // Product.belongsToMany(models.User, { through: models.Cart })
     }
   }
 

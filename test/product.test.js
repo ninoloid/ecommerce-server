@@ -54,7 +54,7 @@ describe('Product Routes', () => {
   describe('Add Product', () => {
 
     describe('Product added successfully', () => {
-      test('Should return status 201, success message, and product data(name, description, category, price, stock, imageUrl)', (done) => {
+      test('Should return status 201, success message, and product data(name, description, category, price, stock, imageUrl', (done) => {
         request(app)
           .post('/product')
           .send({
@@ -321,7 +321,7 @@ describe('Product Routes', () => {
   })
 
   describe('Show All Products', () => {
-    test('Should return status 200 and display all products)', (done) => {
+    test('Should return status 200 and display all products', (done) => {
       request(app)
         .get('/product')
         .end((err, response) => {
@@ -341,7 +341,7 @@ describe('Product Routes', () => {
   })
 
   describe('Show One Products', () => {
-    test('Should return status 200 and display one product by ID)', (done) => {
+    test('Should return status 200 and display one product by ID', (done) => {
       request(app)
         .get('/product/' + product_id)
         .end((err, response) => {
@@ -362,7 +362,7 @@ describe('Product Routes', () => {
 
   describe('Update Product', () => {
     describe('Product updated successfully', () => {
-      test('Should return status 200 and update product by ID)', (done) => {
+      test('Should return status 200 and update product by ID', (done) => {
         request(app)
           .put('/product/' + product_id)
           .send({
@@ -379,7 +379,7 @@ describe('Product Routes', () => {
     })
 
     describe('Failed to update product', () => {
-      test('Should return status 403 and error message that this route can only be accessed by registered user)', (done) => {
+      test('Should return status 403 and error message that this route can only be accessed by registered user', (done) => {
         request(app)
           .put('/product/' + product_id)
           .send({
@@ -394,7 +394,7 @@ describe('Product Routes', () => {
           })
       })
 
-      test('Should return status 400 and error message that user isn\'t authorized)', (done) => {
+      test('Should return status 400 and error message that user isn\'t authorized', (done) => {
         request(app)
           .put('/product/' + product_id)
           .send({
@@ -415,12 +415,11 @@ describe('Product Routes', () => {
   describe('Delete Product', () => {
 
     describe('Product deleted successfully', () => {
-      test('Should return status 200 and delete product by ID)', (done) => {
+      test('Should return status 200 and delete product by ID', (done) => {
         request(app)
           .delete('/product/' + product_id)
           .set('access_token', admin_access_token)
           .end((err, response) => {
-            console.log(response.body)
             const { body, status } = response
             expect(body).toHaveProperty('msg', 'Product deleted successfully')
             expect(status).toBe(200);
@@ -430,7 +429,7 @@ describe('Product Routes', () => {
     })
 
     describe('Failed to delete product', () => {
-      test('Should return status 403 and error message that this route can only be accessed by registered user)', (done) => {
+      test('Should return status 403 and error message that this route can only be accessed by registered user', (done) => {
         request(app)
           .delete('/product/' + product_id)
           .end((err, response) => {
@@ -442,7 +441,7 @@ describe('Product Routes', () => {
           })
       })
 
-      test('Should return status 400 and error message that that user isn\'t authorized)', (done) => {
+      test('Should return status 400 and error message that that user isn\'t authorized', (done) => {
         request(app)
           .delete('/product/' + product_id)
           .set('access_token', user_access_token)
