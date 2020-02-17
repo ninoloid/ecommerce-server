@@ -38,5 +38,43 @@ module.exports = {
           .json({ product })
       })
       .catch(next)
+  },
+
+  updateProduct(req, res, next) {
+    const { id } = req.params
+    const { name, description, category, price, stock, imageUrl } = req.body
+    Product.update({
+      name,
+      description,
+      category,
+      price,
+      stock,
+      imageUrl
+    }, { where: { id } })
+      .then(result => {
+        if (result[0]) {
+          res
+            .status(200)
+            .json({ msg: "Product updated successfully" })
+        } else {
+          next({ msg: "Product not found" })
+        }
+      })
+      .catch(next)
+  },
+
+  deleteProduct(req, res, next) {
+    const { id } = req.params
+    Product.destroy({ where: { id } })
+      .then(result => {
+        if (!result) {
+          next({ msg: "Product not found" })
+        } else {
+          res
+            .status(200)
+            .json({ msg: "Product deleted successfully" })
+        }
+      })
+      .catch(next)
   }
 }

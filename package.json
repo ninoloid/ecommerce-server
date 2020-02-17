@@ -4,7 +4,7 @@
   "description": "Hacktiv8 E-Commerce CMS",
   "main": "app.js",
   "scripts": {
-    "test": "NODE_ENV=testing jest --detectOpenHandles",
+    "test": "NODE_ENV=testing jest --runInBand --detectOpenHandles",
     "dev": "NODE_ENV=development nodemon bin/http.js"
   },
   "author": "Ahmad MSA",

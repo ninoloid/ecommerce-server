@@ -18,6 +18,9 @@ module.exports = (err, req, res, next) => {
   } else if (err.type === 'not authorized') {
     status = 401
     errObj.msg = "Sorry, you're not authorized"
+  } else if (err.msg === 'Product not found') {
+    status = 404
+    errObj.msg = err.msg
   }
 
   res

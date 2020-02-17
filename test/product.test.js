@@ -6,6 +6,7 @@ const { queryInterface } = sequelize
 describe('Product Routes', () => {
   let admin_access_token
   let user_access_token
+  let product_id
 
   beforeAll((done) => {
     request(app)
@@ -38,10 +39,10 @@ describe('Product Routes', () => {
   })
 
   afterAll((done) => {
-    queryInterface.bulkDelete('Products')
-      .then(response => {
-        done()
-      }).catch(err => done(err))
+    // queryInterface.bulkDelete('Products')
+    // .then(response => {
+    //   done()
+    // }).catch(err => done(err))
 
     queryInterface.bulkDelete('Users')
       .then(response => {
@@ -62,14 +63,16 @@ describe('Product Routes', () => {
             category: 'kategori produk 1',
             price: 100000,
             stock: 10,
-            imageUrl: "https://radscanmedical.com/wp-content/uploads/2018/11/coming-soon.png"
+            imageUrl: 'https://radscanmedical.com/wp-content/uploads/2018/11/coming-soon.png'
           })
           .set('access_token', admin_access_token)
           .end((err, response) => {
             const { body, status } = response
             const { msg, product } = body
+            product_id = product.id
             expect(err).toBe(null);
             expect(msg).toBe('Product added to the database')
+            expect(product).toHaveProperty('id')
             expect(product).toHaveProperty('name')
             expect(product).toHaveProperty('description')
             expect(product).toHaveProperty('category')
@@ -92,7 +95,7 @@ describe('Product Routes', () => {
             category: 'kategori produk 1',
             price: 100000,
             stock: 10,
-            imageUrl: "https://radscanmedical.com/wp-content/uploads/2018/11/coming-soon.png"
+            imageUrl: 'https://radscanmedical.com/wp-content/uploads/2018/11/coming-soon.png'
           })
           .end((err, response) => {
             const { body, status } = response
@@ -116,7 +119,7 @@ describe('Product Routes', () => {
             category: 'kategori produk 1',
             price: 100000,
             stock: 10,
-            imageUrl: "https://radscanmedical.com/wp-content/uploads/2018/11/coming-soon.png"
+            imageUrl: 'https://radscanmedical.com/wp-content/uploads/2018/11/coming-soon.png'
           })
           .set('access_token', user_access_token)
           .end((err, response) => {
@@ -141,7 +144,7 @@ describe('Product Routes', () => {
             category: 'kategori produk 1',
             price: 100000,
             stock: 10,
-            imageUrl: "https://radscanmedical.com/wp-content/uploads/2018/11/coming-soon.png"
+            imageUrl: 'https://radscanmedical.com/wp-content/uploads/2018/11/coming-soon.png'
           })
           .set('access_token', admin_access_token)
           .end((err, response) => {
@@ -164,7 +167,7 @@ describe('Product Routes', () => {
             category: 'kategori produk 1',
             price: 100000,
             stock: 10,
-            imageUrl: "https://radscanmedical.com/wp-content/uploads/2018/11/coming-soon.png"
+            imageUrl: 'https://radscanmedical.com/wp-content/uploads/2018/11/coming-soon.png'
           })
           .set('access_token', admin_access_token)
           .end((err, response) => {
@@ -187,7 +190,7 @@ describe('Product Routes', () => {
             category: '',
             price: 100000,
             stock: 10,
-            imageUrl: "https://radscanmedical.com/wp-content/uploads/2018/11/coming-soon.png"
+            imageUrl: 'https://radscanmedical.com/wp-content/uploads/2018/11/coming-soon.png'
           })
           .set('access_token', admin_access_token)
           .end((err, response) => {
@@ -209,7 +212,7 @@ describe('Product Routes', () => {
             description: 'deskripsi produk 1',
             category: 'kategori produk 1',
             stock: 10,
-            imageUrl: "https://radscanmedical.com/wp-content/uploads/2018/11/coming-soon.png"
+            imageUrl: 'https://radscanmedical.com/wp-content/uploads/2018/11/coming-soon.png'
           })
           .set('access_token', admin_access_token)
           .end((err, response) => {
@@ -231,7 +234,7 @@ describe('Product Routes', () => {
             description: 'deskripsi produk 1',
             category: 'kategori produk 1',
             price: 100000,
-            imageUrl: "https://radscanmedical.com/wp-content/uploads/2018/11/coming-soon.png"
+            imageUrl: 'https://radscanmedical.com/wp-content/uploads/2018/11/coming-soon.png'
           })
           .set('access_token', admin_access_token)
           .end((err, response) => {
@@ -267,8 +270,191 @@ describe('Product Routes', () => {
             done()
           })
       })
+
+      test('On price less than 0, return status 400 and error message "Price must be greater than 0"', (done) => {
+        request(app)
+          .post('/product')
+          .send({
+            name: 'produk 1',
+            description: 'deskripsi produk 1',
+            category: 'kategori produk 1',
+            price: -1,
+            stock: 10,
+            imageUrl: 'https://radscanmedical.com/wp-content/uploads/2018/11/coming-soon.png'
+          })
+          .set('access_token', admin_access_token)
+          .end((err, response) => {
+            const { body, status } = response
+            const { errObj } = body
+            expect(err).toBe(null);
+            expect(errObj).toHaveProperty('msg', 'Validation Error')
+            expect(errObj).toHaveProperty('errors', expect.arrayContaining(['Price must be greater than 0']))
+            expect(status).toBe(400);
+            done()
+          })
+      })
+
+      test('On stock less than 0, return status 400 and error message "Stock must be greater than 0"', (done) => {
+        request(app)
+          .post('/product')
+          .send({
+            name: 'produk 1',
+            description: 'deskripsi produk 1',
+            category: 'kategori produk 1',
+            price: 100000,
+            stock: -1,
+            imageUrl: 'https://radscanmedical.com/wp-content/uploads/2018/11/coming-soon.png'
+          })
+          .set('access_token', admin_access_token)
+          .end((err, response) => {
+            const { body, status } = response
+            const { errObj } = body
+            expect(err).toBe(null);
+            expect(errObj).toHaveProperty('msg', 'Validation Error')
+            expect(errObj).toHaveProperty('errors', expect.arrayContaining(['Stock must be greater than 0']))
+            expect(status).toBe(400);
+            done()
+          })
+      })
     })
 
   })
+
+  describe('Show All Products', () => {
+    test('Should return status 200 and display all products)', (done) => {
+      request(app)
+        .get('/product')
+        .end((err, response) => {
+          const { body, status } = response
+          const { product } = body
+          expect(body).toHaveProperty('products', expect.arrayContaining([expect.objectContaining({ id: expect.any(Number) })]))
+          expect(body).toHaveProperty('products', expect.arrayContaining([expect.objectContaining({ name: expect.any(String) })]))
+          expect(body).toHaveProperty('products', expect.arrayContaining([expect.objectContaining({ description: expect.any(String) })]))
+          expect(body).toHaveProperty('products', expect.arrayContaining([expect.objectContaining({ category: expect.any(String) })]))
+          expect(body).toHaveProperty('products', expect.arrayContaining([expect.objectContaining({ price: expect.any(Number) })]))
+          expect(body).toHaveProperty('products', expect.arrayContaining([expect.objectContaining({ stock: expect.any(Number) })]))
+          expect(body).toHaveProperty('products', expect.arrayContaining([expect.objectContaining({ imageUrl: expect.any(String) })]))
+          expect(status).toBe(200);
+          done()
+        })
+    })
+  })
+
+  describe('Show One Products', () => {
+    test('Should return status 200 and display one product by ID)', (done) => {
+      request(app)
+        .get('/product/' + product_id)
+        .end((err, response) => {
+          const { body, status } = response
+          const { product } = body
+          expect(product).toHaveProperty('id')
+          expect(product).toHaveProperty('name')
+          expect(product).toHaveProperty('description')
+          expect(product).toHaveProperty('category')
+          expect(product).toHaveProperty('price')
+          expect(product).toHaveProperty('stock')
+          expect(product).toHaveProperty('imageUrl')
+          expect(status).toBe(200);
+          done()
+        })
+    })
+  })
+
+  describe('Update Product', () => {
+    describe('Product updated successfully', () => {
+      test('Should return status 200 and update product by ID)', (done) => {
+        request(app)
+          .put('/product/' + product_id)
+          .send({
+            name: 'produk 1 updated',
+          })
+          .set('access_token', admin_access_token)
+          .end((err, response) => {
+            const { body, status } = response
+            expect(body).toHaveProperty('msg', 'Product updated successfully')
+            expect(status).toBe(200);
+            done()
+          })
+      })
+    })
+
+    describe('Failed to update product', () => {
+      test('Should return status 403 and error message that this route can only be accessed by registered user)', (done) => {
+        request(app)
+          .put('/product/' + product_id)
+          .send({
+            name: 'produk 1 updated',
+          })
+          .end((err, response) => {
+            const { body, status } = response
+            const { errObj } = body
+            expect(errObj).toHaveProperty('msg', 'This page can only be accessed by registered users, please login first')
+            expect(status).toBe(403);
+            done()
+          })
+      })
+
+      test('Should return status 400 and error message that user isn\'t authorized)', (done) => {
+        request(app)
+          .put('/product/' + product_id)
+          .send({
+            name: 'produk 1 updated',
+          })
+          .set('access_token', user_access_token)
+          .end((err, response) => {
+            const { body, status } = response
+            const { errObj } = body
+            expect(errObj).toHaveProperty('msg', 'Sorry, you\'re not authorized')
+            expect(status).toBe(401);
+            done()
+          })
+      })
+    })
+  })
+
+  describe('Delete Product', () => {
+    describe('Product deleted successfully', () => {
+      test('Should return status 200 and delete product by ID)', (done) => {
+        request(app)
+          .delete('/product/' + product_id)
+          .set('access_token', admin_access_token)
+          .end((err, response) => {
+            console.log(response.body)
+            const { body, status } = response
+            expect(body).toHaveProperty('msg', 'Product deleted successfully')
+            expect(status).toBe(200);
+            done()
+          })
+      })
+    })
+
+    describe('Failed to delete product', () => {
+      test('Should return status 403 and error message that this route can only be accessed by registered user)', (done) => {
+        request(app)
+          .delete('/product/' + product_id)
+          .end((err, response) => {
+            const { body, status } = response
+            const { errObj } = body
+            expect(errObj).toHaveProperty('msg', 'This page can only be accessed by registered users, please login first')
+            expect(status).toBe(403);
+            done()
+          })
+      })
+
+      test('Should return status 400 and error message that that user isn\'t authorized)', (done) => {
+        request(app)
+          .delete('/product/' + product_id)
+          .set('access_token', user_access_token)
+          .end((err, response) => {
+            const { body, status } = response
+            const { errObj } = body
+            expect(errObj).toHaveProperty('msg', 'Sorry, you\'re not authorized')
+            expect(status).toBe(401);
+            done()
+          })
+      })
+    })
+  })
+
   // END OF PRODUCT ROUTES TEST
 })
