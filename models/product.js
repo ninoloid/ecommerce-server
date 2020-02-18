@@ -57,6 +57,10 @@ module.exports = (sequelize, DataTypes) => {
           args: true,
           msg: "Product price cannot be empty"
         },
+        isInt: {
+          args: true,
+          msg: "Can only receive number for price field"
+        },
         notEmpty: {
           args: true,
           msg: "Product price cannot be empty"
@@ -74,6 +78,10 @@ module.exports = (sequelize, DataTypes) => {
         notNull: {
           args: true,
           msg: "Product stock cannot be empty"
+        },
+        isInt: {
+          args: true,
+          msg: "Can only receive number for stock field"
         },
         notEmpty: {
           args: true,
