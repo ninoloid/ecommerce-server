@@ -1,8 +1,8 @@
 const request = require('supertest')
 const app = require('../app')
-const { sequelize } = require('../models')
+const { sequelize, User, Product } = require('../models')
 const { queryInterface } = sequelize
-const { verify } = require('../helpers/jwt')
+const { sign } = require('../helpers/jwt')
 
 describe('Product Routes', () => {
   let access_token
@@ -11,35 +11,34 @@ describe('Product Routes', () => {
   let cart_id
 
   beforeAll((done) => {
-    request(app)
-      .post('/register')
-      .send({
-        username: 'adminadmin',
-        email: 'admin@admin.com',
-        password: 'adminadmin',
-        isAdmin: true
-      })
-      .end((err, response) => {
-        const { token } = response.body
-        access_token = token
+    const addUser = User.create({
+      username: 'adminadmin',
+      email: 'admin@admin.com',
+      password: 'adminadmin',
+      isAdmin: true
+    })
 
-        request(app)
-          .post('/product')
-          .send({
-            name: 'produk 1',
-            description: 'deskripsi produk 1',
-            category: 'kategori produk 1',
-            price: 100000,
-            stock: 10,
-            imageUrl: 'https://radscanmedical.com/wp-content/uploads/2018/11/coming-soon.png'
-          })
-          .set('access_token', token)
-          .end((err, response) => {
-            const { id } = response.body.product
-            ProductId = id
-            done()
-          })
+    const addProduct = Product.create({
+      name: 'produk 1',
+      description: 'deskripsi produk 1',
+      category: 'kategori produk 1',
+      price: 100000,
+      stock: 10,
+      imageUrl: 'https://radscanmedical.com/wp-content/uploads/2018/11/coming-soon.png'
+    })
+
+    Promise.all([addUser, addProduct])
+      .then(values => {
+        const user = values[0]
+        const product = values[1]
+
+        UserId = user.id
+        access_token = sign({ id: user.id })
+        ProductId = product.id
+        done()
       })
+      .catch(err => console.log(err))
+
   })
 
   afterAll((done) => {
@@ -64,7 +63,6 @@ describe('Product Routes', () => {
 
     describe('Product added to cart', () => {
       test('Should return status 201 and message that product added to cart', (done) => {
-        UserId = verify(access_token).id
         request(app)
           .post('/cart')
           .send({

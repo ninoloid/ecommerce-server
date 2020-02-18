@@ -1,7 +1,8 @@
 const request = require('supertest')
 const app = require('../app')
-const { sequelize } = require('../models')
+const { sequelize, User } = require('../models')
 const { queryInterface } = sequelize
+const { sign } = require('../helpers/jwt')
 
 describe('Product Routes', () => {
   let admin_access_token
@@ -9,33 +10,28 @@ describe('Product Routes', () => {
   let product_id
 
   beforeAll((done) => {
-    request(app)
-      .post('/register')
-      .send({
-        username: 'adminadmin',
-        email: 'admin@admin.com',
-        password: 'adminadmin',
-        isAdmin: true
-      })
-      .end((err, response) => {
-        const { body } = response
-        admin_access_token = body.token
-        done()
-      })
+    const createAdmin = User.create({
+      username: 'adminadmin',
+      email: 'admin@admin.com',
+      password: 'adminadmin',
+      isAdmin: true
+    })
 
-    request(app)
-      .post('/register')
-      .send({
-        username: 'useruser',
-        email: 'user@user.com',
-        password: 'useruser',
-        isAdmin: false
-      })
-      .end((err, response) => {
-        const { body } = response
-        user_access_token = body.token
+    const createUser = User.create({
+      username: 'useruser',
+      email: 'user@user.com',
+      password: 'useruser'
+    })
+
+    Promise.all([createAdmin, createUser])
+      .then(users => {
+        const admin = users[0]
+        const user = users[1]
+        admin_access_token = sign({ id: admin.id })
+        user_access_token = sign({ id: user.id })
         done()
       })
+      .catch(err => console.log(err))
   })
 
   afterAll((done) => {
