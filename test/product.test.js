@@ -56,7 +56,7 @@ describe('Product Routes', () => {
           .send({
             name: 'produk 1',
             description: 'deskripsi produk 1',
-            category: 'kategori produk 1',
+            CategoryId: 1,
             price: 100000,
             stock: 10,
             imageUrl: 'https://radscanmedical.com/wp-content/uploads/2018/11/coming-soon.png'
@@ -71,7 +71,7 @@ describe('Product Routes', () => {
             expect(product).toHaveProperty('id')
             expect(product).toHaveProperty('name')
             expect(product).toHaveProperty('description')
-            expect(product).toHaveProperty('category')
+            expect(product).toHaveProperty('CategoryId')
             expect(product).toHaveProperty('price')
             expect(product).toHaveProperty('stock')
             expect(product).toHaveProperty('imageUrl')
@@ -88,7 +88,7 @@ describe('Product Routes', () => {
           .send({
             name: 'produk 1',
             description: 'deskripsi produk 1',
-            category: 'kategori produk 1',
+            CategoryId: 1,
             price: 100000,
             stock: 10,
             imageUrl: 'https://radscanmedical.com/wp-content/uploads/2018/11/coming-soon.png'
@@ -112,7 +112,7 @@ describe('Product Routes', () => {
           .send({
             name: 'produk 1',
             description: 'deskripsi produk 1',
-            category: 'kategori produk 1',
+            CategoryId: 1,
             price: 100000,
             stock: 10,
             imageUrl: 'https://radscanmedical.com/wp-content/uploads/2018/11/coming-soon.png'
@@ -137,7 +137,7 @@ describe('Product Routes', () => {
           .send({
             name: '',
             description: 'deskripsi produk 1',
-            category: 'kategori produk 1',
+            CategoryId: 1,
             price: 100000,
             stock: 10,
             imageUrl: 'https://radscanmedical.com/wp-content/uploads/2018/11/coming-soon.png'
@@ -160,7 +160,7 @@ describe('Product Routes', () => {
           .send({
             name: 'produk 1',
             description: '',
-            category: 'kategori produk 1',
+            CategoryId: 1,
             price: 100000,
             stock: 10,
             imageUrl: 'https://radscanmedical.com/wp-content/uploads/2018/11/coming-soon.png'
@@ -183,7 +183,7 @@ describe('Product Routes', () => {
           .send({
             name: 'produk 1',
             description: 'deskripsi produk 1',
-            category: '',
+            CategoryId: null,
             price: 100000,
             stock: 10,
             imageUrl: 'https://radscanmedical.com/wp-content/uploads/2018/11/coming-soon.png'
@@ -206,7 +206,7 @@ describe('Product Routes', () => {
           .send({
             name: 'produk 1',
             description: 'deskripsi produk 1',
-            category: 'kategori produk 1',
+            CategoryId: 1,
             stock: 10,
             imageUrl: 'https://radscanmedical.com/wp-content/uploads/2018/11/coming-soon.png'
           })
@@ -228,7 +228,7 @@ describe('Product Routes', () => {
           .send({
             name: 'produk 1',
             description: 'deskripsi produk 1',
-            category: 'kategori produk 1',
+            CategoryId: 1,
             price: 100000,
             imageUrl: 'https://radscanmedical.com/wp-content/uploads/2018/11/coming-soon.png'
           })
@@ -244,36 +244,13 @@ describe('Product Routes', () => {
           })
       })
 
-      test('On null or empty image url, return status 400 and error message "Image URL cannot be empty"', (done) => {
-        request(app)
-          .post('/product')
-          .send({
-            name: 'produk 1',
-            description: 'deskripsi produk 1',
-            category: 'kategori produk 1',
-            price: 100000,
-            stock: 10,
-            imageUrl: ''
-          })
-          .set('access_token', admin_access_token)
-          .end((err, response) => {
-            const { body, status } = response
-            const { errObj } = body
-            expect(err).toBe(null);
-            expect(errObj).toHaveProperty('msg', 'Validation Error')
-            expect(errObj).toHaveProperty('errors', expect.arrayContaining(['Image URL cannot be empty']))
-            expect(status).toBe(400);
-            done()
-          })
-      })
-
       test('On price less than 0, return status 400 and error message "Price must be greater than 0"', (done) => {
         request(app)
           .post('/product')
           .send({
             name: 'produk 1',
             description: 'deskripsi produk 1',
-            category: 'kategori produk 1',
+            CategoryId: 1,
             price: -1,
             stock: 10,
             imageUrl: 'https://radscanmedical.com/wp-content/uploads/2018/11/coming-soon.png'
@@ -296,7 +273,7 @@ describe('Product Routes', () => {
           .send({
             name: 'produk 1',
             description: 'deskripsi produk 1',
-            category: 'kategori produk 1',
+            CategoryId: 1,
             price: 100000,
             stock: -1,
             imageUrl: 'https://radscanmedical.com/wp-content/uploads/2018/11/coming-soon.png'
@@ -322,11 +299,10 @@ describe('Product Routes', () => {
         .get('/product')
         .end((err, response) => {
           const { body, status } = response
-          const { product } = body
           expect(body).toHaveProperty('products', expect.arrayContaining([expect.objectContaining({ id: expect.any(Number) })]))
           expect(body).toHaveProperty('products', expect.arrayContaining([expect.objectContaining({ name: expect.any(String) })]))
           expect(body).toHaveProperty('products', expect.arrayContaining([expect.objectContaining({ description: expect.any(String) })]))
-          expect(body).toHaveProperty('products', expect.arrayContaining([expect.objectContaining({ category: expect.any(String) })]))
+          expect(body).toHaveProperty('products', expect.arrayContaining([expect.objectContaining({ CategoryId: expect.any(Number) })]))
           expect(body).toHaveProperty('products', expect.arrayContaining([expect.objectContaining({ price: expect.any(Number) })]))
           expect(body).toHaveProperty('products', expect.arrayContaining([expect.objectContaining({ stock: expect.any(Number) })]))
           expect(body).toHaveProperty('products', expect.arrayContaining([expect.objectContaining({ imageUrl: expect.any(String) })]))
@@ -346,7 +322,7 @@ describe('Product Routes', () => {
           expect(product).toHaveProperty('id')
           expect(product).toHaveProperty('name')
           expect(product).toHaveProperty('description')
-          expect(product).toHaveProperty('category')
+          expect(product).toHaveProperty('CategoryId')
           expect(product).toHaveProperty('price')
           expect(product).toHaveProperty('stock')
           expect(product).toHaveProperty('imageUrl')

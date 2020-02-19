@@ -21,7 +21,7 @@ describe('Product Routes', () => {
     const addProduct = Product.create({
       name: 'produk 1',
       description: 'deskripsi produk 1',
-      category: 'kategori produk 1',
+      CategoryId: 1,
       price: 100000,
       stock: 10,
       imageUrl: 'https://radscanmedical.com/wp-content/uploads/2018/11/coming-soon.png'
@@ -124,7 +124,7 @@ describe('Product Routes', () => {
             expect(body).toHaveProperty('Products', expect.arrayContaining([expect.objectContaining({ id: expect.any(Number) })]))
             expect(body).toHaveProperty('Products', expect.arrayContaining([expect.objectContaining({ name: expect.any(String) })]))
             expect(body).toHaveProperty('Products', expect.arrayContaining([expect.objectContaining({ description: expect.any(String) })]))
-            expect(body).toHaveProperty('Products', expect.arrayContaining([expect.objectContaining({ category: expect.any(String) })]))
+            expect(body).toHaveProperty('Products', expect.arrayContaining([expect.objectContaining({ CategoryId: expect.any(Number) })]))
             expect(body).toHaveProperty('Products', expect.arrayContaining([expect.objectContaining({ price: expect.any(Number) })]))
             expect(body).toHaveProperty('Products', expect.arrayContaining([expect.objectContaining({ stock: expect.any(Number) })]))
             expect(body).toHaveProperty('Products', expect.arrayContaining([expect.objectContaining({ imageUrl: expect.any(String) })]))

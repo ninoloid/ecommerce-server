@@ -2,8 +2,12 @@ const router = require('express').Router()
 const { productController } = require('../controllers')
 const authentication = require('../middlewares/authentication')
 const authorization = require('../middlewares/authorization')
+const s3upload = require('../middlewares/s3upload')
+const multer = require('multer')
 
-router.post('/', authentication, authorization, productController.addProduct)
+router
+  .route('/')
+  .post(multer({ dest: 'temp/', limits: { fieldSize: 3 * 1024 * 1024 } }).single('imageUrl'), authentication, authorization, s3upload, productController.addProduct)
 router.get('/', productController.getAllProduct)
 router.get('/:id', productController.getOneProduct)
 router.put('/:id', authentication, authorization, productController.updateProduct)

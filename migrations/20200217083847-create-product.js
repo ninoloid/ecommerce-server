@@ -14,8 +14,8 @@ module.exports = {
       description: {
         type: Sequelize.STRING
       },
-      category: {
-        type: Sequelize.STRING
+      CategoryId: {
+        type: Sequelize.INTEGER
       },
       price: {
         type: Sequelize.INTEGER
@@ -28,11 +28,13 @@ module.exports = {
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: new Date()
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: new Date()
       }
     });
   },

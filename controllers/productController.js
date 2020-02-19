@@ -1,12 +1,14 @@
-const { Product } = require('../models')
+const { Product, Category } = require('../models')
 
 module.exports = {
   addProduct(req, res, next) {
-    const { name, description, category, price, stock, imageUrl } = req.body
+    const { name, description, CategoryId, price, stock } = req.body
+    const { imageUrl } = req
+    
     Product.create({
       name,
       description,
-      category,
+      CategoryId,
       price,
       stock,
       imageUrl
@@ -20,7 +22,7 @@ module.exports = {
   },
 
   getAllProduct(req, res, next) {
-    Product.findAll()
+    Product.findAll({include: Category})
       .then(products => {
         res
           .status(200)
@@ -31,7 +33,7 @@ module.exports = {
 
   getOneProduct(req, res, next) {
     const { id } = req.params
-    Product.findOne({ where: { id } })
+    Product.findOne({ where: { id }, include: Category })
       .then(product => {
         res
           .status(200)
@@ -42,11 +44,11 @@ module.exports = {
 
   updateProduct(req, res, next) {
     const { id } = req.params
-    const { name, description, category, price, stock, imageUrl } = req.body
+    const { name, description, CategoryId, price, stock, imageUrl } = req.body
     Product.update({
       name,
       description,
-      category,
+      CategoryId,
       price,
       stock,
       imageUrl

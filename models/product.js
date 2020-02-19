@@ -3,6 +3,7 @@ module.exports = (sequelize, DataTypes) => {
   class Product extends sequelize.Sequelize.Model {
     static associate(models) {
       // Product.belongsToMany(models.User, { through: models.Cart })
+      Product.belongsTo(models.Category)
     }
   }
 
@@ -35,10 +36,14 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    category: {
-      type: DataTypes.STRING,
+    CategoryId: {
+      type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
+        isInt: {
+          args: true,
+          msg: "Can only receive number for stock field"
+        },
         notNull: {
           args: true,
           msg: "Product category cannot be empty"
@@ -93,20 +98,21 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    imageUrl: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notNull: {
-          args: true,
-          msg: "Image URL cannot be empty"
-        },
-        notEmpty: {
-          args: true,
-          msg: "Image URL cannot be empty"
-        }
-      }
-    },
+    // imageUrl: {
+    //   type: DataTypes.STRING,
+    //   allowNull: false,
+    //   validate: {
+    //     notNull: {
+    //       args: true,
+    //       msg: "Image URL cannot be empty"
+    //     },
+    //     notEmpty: {
+    //       args: true,
+    //       msg: "Image URL cannot be empty"
+    //     }
+    //   }
+    // },
+    imageUrl: DataTypes.STRING
   }, { sequelize });
   return Product;
 };
