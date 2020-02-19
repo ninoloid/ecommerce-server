@@ -10,7 +10,10 @@ router
   .post(multer({ dest: 'temp/', limits: { fieldSize: 3 * 1024 * 1024 } }).single('imageUrl'), authentication, authorization, s3upload, productController.addProduct)
 router.get('/', productController.getAllProduct)
 router.get('/:id', productController.getOneProduct)
-router.put('/:id', authentication, authorization, productController.updateProduct)
+// router.put('/:id', authentication, authorization, productController.updateProduct)
+router
+  .route('/:id')
+  .put(multer({ dest: 'temp/', limits: { fieldSize: 3 * 1024 * 1024 } }).single('imageUrl'), authentication, authorization, s3upload, productController.updateProduct)
 router.delete('/:id', authentication, authorization, productController.deleteProduct)
 
 module.exports = router

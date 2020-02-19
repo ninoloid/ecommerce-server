@@ -42,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         isInt: {
           args: true,
-          msg: "Can only receive number for stock field"
+          msg: "Can only receive number for product category"
         },
         notNull: {
           args: true,

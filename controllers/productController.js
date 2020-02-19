@@ -44,7 +44,9 @@ module.exports = {
 
   updateProduct(req, res, next) {
     const { id } = req.params
-    const { name, description, CategoryId, price, stock, imageUrl } = req.body
+    const { name, description, CategoryId, price, stock } = req.body
+    const { imageUrl } = req
+
     Product.update({
       name,
       description,
