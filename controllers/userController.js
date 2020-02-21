@@ -2,6 +2,7 @@ const { User } = require('../models')
 const { compare } = require('../helpers/hash')
 const { sign } = require('../helpers/jwt')
 const { Op } = require('sequelize')
+const { hash } = require('../helpers/hash')
 
 module.exports = {
   register(req, res, next) {
@@ -55,17 +56,17 @@ module.exports = {
       })
   },
 
-  showAdmin (req, res, next) {
-    User.findAll({where: { isAdmin: true }})
-    .then(({ data }) => {
+  showUsers(req, res, next) {
+    User.findAll()
+    .then(users => {
       res
         .status(200)
-        .json(data)
+        .json(users)
     })
     .catch(next)
   },
 
-  updateAdminStatus (req, res, next) {
+  updateAdminStatus(req, res, next) {
     const { id } = req.params
     const { isActivated } = req.body
     User.update({
@@ -93,6 +94,26 @@ module.exports = {
           res
             .status(200)
             .json({ msg: "Admin account deleted successfully" })
+        }
+      })
+      .catch(next)
+  },
+
+  updateUserPassword(req, res, next) {
+    const { id } = req.params
+    let { password } = req.body
+    password = hash(password)
+    
+    User.update({
+      password
+    }, { where: { id }} )
+      .then(result => {
+        if (result[0]) {
+          res
+            .status(200)
+            .json({ msg: "User password updated successfully" })
+        } else {
+          next({ msg: "User not found" })
         }
       })
       .catch(next)

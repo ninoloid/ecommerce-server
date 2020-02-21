@@ -27,6 +27,12 @@ module.exports = (err, req, res, next) => {
   } else if (err.msg === 'Admin account not found') {
     status = 404
     errObj.msg = err.msg
+  } else if (err.msg === 'User not found') {
+    status = 404
+    errObj.msg = err.msg
+  } else if (err.type === 'forbidden area') {
+    status = 403
+    errObj.msg = "This page can only be accessed by super admin. You're not!"
   }
 
   res
