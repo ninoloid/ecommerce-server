@@ -46,7 +46,7 @@ module.exports = {
           const token = sign(payload)
           res
             .status(200)
-            .json({ token, username: user.username })
+            .json({ token, username: user.username, isSuperAdmin: user.isSuperAdmin })
         }
       })
       .catch(err => {
@@ -54,4 +54,47 @@ module.exports = {
         next({ msg: "Invalid Username, Email, or Password" })
       })
   },
+
+  showAdmin (req, res, next) {
+    User.findAll({where: { isAdmin: true }})
+    .then(({ data }) => {
+      res
+        .status(200)
+        .json(data)
+    })
+    .catch(next)
+  },
+
+  updateAdminStatus (req, res, next) {
+    const { id } = req.params
+    const { isActivated } = req.body
+    User.update({
+      isActivated
+    }, { where: { id }} )
+      .then(result => {
+        if (result[0]) {
+          res
+            .status(200)
+            .json({ msg: "Admin status updated successfully" })
+        } else {
+          next({ msg: "Admin account not found" })
+        }
+      })
+      .catch(next)
+  },
+
+  deleteUser(req, res, next) {
+    const { id } = req.params
+    User.destroy({ where: { id } })
+      .then(result => {
+        if (!result) {
+          next({ msg: "Admin account not found" })
+        } else {
+          res
+            .status(200)
+            .json({ msg: "Admin account deleted successfully" })
+        }
+      })
+      .catch(next)
+  }
 }

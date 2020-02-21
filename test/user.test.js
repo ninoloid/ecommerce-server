@@ -22,7 +22,8 @@ describe('User Routes', () => {
             username: 'adminadmin',
             email: 'admin@admin.com',
             password: 'adminadmin',
-            isAdmin: true
+            isAdmin: true,
+            isActivated: true
           })
           .end((err, response) => {
             const { body, status } = response
@@ -43,7 +44,8 @@ describe('User Routes', () => {
             username: '',
             email: 'admin@admin.com',
             password: 'adminadmin',
-            isAdmin: true
+            isAdmin: true,
+            isActivated: true
           })
           .end((err, response) => {
             const { body, status } = response
@@ -62,7 +64,8 @@ describe('User Routes', () => {
             username: 'adminadmin',
             email: '',
             password: 'adminadmin',
-            isAdmin: true
+            isAdmin: true,
+            isActivated: true
           })
           .end((err, response) => {
             const { body, status } = response
@@ -81,7 +84,8 @@ describe('User Routes', () => {
             username: 'adminadmin',
             email: 'admin@admin.com',
             password: '',
-            isAdmin: true
+            isAdmin: true,
+            isActivated: true
           })
           .end((err, response) => {
             const { body, status } = response
@@ -99,7 +103,8 @@ describe('User Routes', () => {
           .send({
             email: 'admin@admin.com',
             password: 'adminadmin',
-            isAdmin: true
+            isAdmin: true,
+            isActivated: true
           })
           .end((err, response) => {
             const { body, status } = response
@@ -117,7 +122,8 @@ describe('User Routes', () => {
           .send({
             username: 'adminadmin',
             password: 'adminadmin',
-            isAdmin: true
+            isAdmin: true,
+            isActivated: true
           })
           .end((err, response) => {
             const { body, status } = response
@@ -135,7 +141,8 @@ describe('User Routes', () => {
           .send({
             username: 'adminadmin',
             email: 'admin@admin.com',
-            isAdmin: true
+            isAdmin: true,
+            isActivated: true
           })
           .end((err, response) => {
             const { body, status } = response
@@ -154,7 +161,8 @@ describe('User Routes', () => {
             username: 'adminadmin',
             email: 'admin2@admin.com',
             password: 'adminadmin',
-            isAdmin: true
+            isAdmin: true,
+            isActivated: true
           })
           .end((err, response) => {
             const { body, status } = response
@@ -173,7 +181,8 @@ describe('User Routes', () => {
             username: 'adminadmin2',
             email: 'admin@admin.com',
             password: 'adminadmin',
-            isAdmin: true
+            isAdmin: true,
+            isActivated: true
           })
           .end((err, response) => {
             const { body, status } = response
@@ -192,7 +201,8 @@ describe('User Routes', () => {
             username: 'adminadmin2',
             email: 'admin@admin',
             password: 'adminadmin',
-            isAdmin: true
+            isAdmin: true,
+            isActivated: true
           })
           .end((err, response) => {
             const { body, status } = response

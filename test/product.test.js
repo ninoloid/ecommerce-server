@@ -6,6 +6,7 @@ const { sign } = require('../helpers/jwt')
 
 describe('Product Routes', () => {
   let admin_access_token
+  let notActiveAdmin_access_token
   let user_access_token
   let product_id
 
@@ -14,7 +15,16 @@ describe('Product Routes', () => {
       username: 'adminadmin',
       email: 'admin@admin.com',
       password: 'adminadmin',
-      isAdmin: true
+      isAdmin: true,
+      isActivated: true
+    })
+
+    const notActivatedAdmin = User.create({
+      username: 'fakeadmin',
+      email: 'fakeadmin@admin.com',
+      password: 'fakeadmin',
+      isAdmin: true,
+      isActivated: false
     })
 
     const createUser = User.create({
@@ -23,11 +33,13 @@ describe('Product Routes', () => {
       password: 'useruser'
     })
 
-    Promise.all([createAdmin, createUser])
+    Promise.all([createAdmin, notActivatedAdmin, createUser])
       .then(users => {
         const admin = users[0]
-        const user = users[1]
+        const notActiveAdmin = users[1]
+        const user = users[2]
         admin_access_token = sign({ id: admin.id })
+        notActiveAdmin_access_token = sign({ id: notActiveAdmin.id })
         user_access_token = sign({ id: user.id })
         done()
       })
@@ -124,6 +136,31 @@ describe('Product Routes', () => {
             expect(body).toHaveProperty('errObj',
               expect.objectContaining({
                 msg: 'Sorry, you\'re not authorized'
+              })
+            )
+            expect(status).toBe(401);
+            done()
+          })
+      })
+
+      test('On authorization failed, return status 401 and error message "Sorry, your admin account isn\'t activated yet"', (done) => {
+        request(app)
+          .post('/product')
+          .send({
+            name: 'produk 1',
+            description: 'deskripsi produk 1',
+            CategoryId: 1,
+            price: 100000,
+            stock: 10,
+            imageUrl: 'https://radscanmedical.com/wp-content/uploads/2018/11/coming-soon.png'
+          })
+          .set('access_token', notActiveAdmin_access_token)
+          .end((err, response) => {
+            const { body, status } = response
+            expect(err).toBe(null);
+            expect(body).toHaveProperty('errObj',
+              expect.objectContaining({
+                msg: 'Sorry, your admin account isn\'t activated yet'
               })
             )
             expect(status).toBe(401);

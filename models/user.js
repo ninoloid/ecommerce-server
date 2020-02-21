@@ -67,7 +67,8 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     isAdmin: DataTypes.BOOLEAN,
-    isSuperAdmin: DataTypes.BOOLEAN
+    isSuperAdmin: DataTypes.BOOLEAN,
+    isActivated: DataTypes.BOOLEAN
   }, {
     sequelize,
     hooks: {
