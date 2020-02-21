@@ -1,7 +1,7 @@
 const router = require('express').Router()
 const { productController } = require('../controllers')
 const authentication = require('../middlewares/authentication')
-const { isActivatedAdmin, isSuperAdmin } = require('../middlewares/authorization')
+const { isActivatedAdmin } = require('../middlewares/authorization')
 const s3upload = require('../middlewares/s3upload')
 const multer = require('multer')
 

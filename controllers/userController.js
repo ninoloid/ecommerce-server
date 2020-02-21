@@ -66,7 +66,8 @@ module.exports = {
   },
 
   updateAdminStatus (req, res, next) {
-    const { id, isActivated } = req.body
+    const { id } = req.params
+    const { isActivated } = req.body
     User.update({
       isActivated
     }, { where: { id }} )
@@ -77,6 +78,21 @@ module.exports = {
             .json({ msg: "Admin status updated successfully" })
         } else {
           next({ msg: "Admin account not found" })
+        }
+      })
+      .catch(next)
+  },
+
+  deleteUser(req, res, next) {
+    const { id } = req.params
+    User.destroy({ where: { id } })
+      .then(result => {
+        if (!result) {
+          next({ msg: "Admin account not found" })
+        } else {
+          res
+            .status(200)
+            .json({ msg: "Admin account deleted successfully" })
         }
       })
       .catch(next)
