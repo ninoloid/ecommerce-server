@@ -15,7 +15,8 @@ describe('Product Routes', () => {
       username: 'adminadmin',
       email: 'admin@admin.com',
       password: 'adminadmin',
-      isAdmin: true
+      isAdmin: true,
+      isActivated: true
     })
 
     const addProduct = Product.create({
