@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "NODE_ENV=testing jest --runInBand --detectOpenHandles",
-    "dev": "NODE_ENV=development nodemon bin/http.js"
+    "dev": "NODE_ENV=development nodemon bin/http.js",
+    "start": "node app"
   },
   "author": "Ahmad MSA",
   "license": "ISC",
