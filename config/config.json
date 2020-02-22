@@ -1,5 +1,12 @@
 {
   "production": {
     "use_env_variable": "DATABASE_URL"
+  },
+  "development": {
+    "username": "",
+    "password": "",
+    "database": "db_ecommerce",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
   }
 }
