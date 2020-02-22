@@ -6,7 +6,6 @@ module.exports = {
     User.findOne({ where: { id } })
       .then(user => {
         const isAdmin = user.isAdmin
-        console.log('aaaaaaaadmin laiiiiin?', isAdmin)
         const isActivated = user.isActivated
         isAdmin ? isActivated ? next()
           : next({ type: 'not activated' })
