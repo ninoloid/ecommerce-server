@@ -45,7 +45,11 @@ module.exports = {
   updateProduct(req, res, next) {
     const { id } = req.params
     const { name, description, CategoryId, price, stock } = req.body
-    const { imageUrl } = req
+
+    let imageUrl
+    if (req.imageUrl !== 'https://radscanmedical.com/wp-content/uploads/2018/11/coming-soon.png') {
+      imageUrl = req.imageUrl
+    }
 
     Product.update({
       name,

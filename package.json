@@ -4,6 +4,7 @@
   "description": "Hacktiv8 E-Commerce CMS",
   "main": "app.js",
   "scripts": {
+    "start": "node bin/http.js",
     "test": "NODE_ENV=testing jest --runInBand --detectOpenHandles",
     "dev": "NODE_ENV=development nodemon bin/http.js"
   },

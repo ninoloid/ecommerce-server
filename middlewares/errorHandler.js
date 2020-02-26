@@ -1,5 +1,5 @@
 module.exports = (err, req, res, next) => {
-  // console.log('error handler', err)
+  console.log('error handlers', err)
   let status = 500
   let errObj = {
     msg: "Internal Server Error"
@@ -12,7 +12,7 @@ module.exports = (err, req, res, next) => {
   } else if (err.msg === 'Invalid Username, Email, or Password') {
     status = 400
     errObj.msg = err.msg
-  } else if (err.type === 'not login') {
+  } else if (err.type === 'not login' || err.name === 'JsonWebTokenError') {
     status = 403
     errObj.msg = "This page can only be accessed by registered users, please login first"
   } else if (err.type === 'not authorized') {
@@ -33,6 +33,9 @@ module.exports = (err, req, res, next) => {
   } else if (err.type === 'forbidden area') {
     status = 403
     errObj.msg = "This page can only be accessed by super admin. You're not!"
+  } else if (err.name === 'outofstock') {
+    status = 400
+    errObj.msg = "Sorry, we're running out of stock"
   }
 
   res

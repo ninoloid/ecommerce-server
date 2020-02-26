@@ -5,7 +5,15 @@ module.exports = (sequelize, DataTypes) => {
   Cart.init({
     UserId: DataTypes.INTEGER,
     ProductId: DataTypes.INTEGER,
-    quantity: DataTypes.INTEGER
-  }, { sequelize });
+    quantity: DataTypes.INTEGER,
+    checkout: DataTypes.BOOLEAN
+  }, {
+    sequelize,
+    hooks: {
+      beforeCreate(Cart) {
+        Cart.quantity = 1
+      }
+    }
+  });
   return Cart;
 };

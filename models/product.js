@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     description: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false,
       validate: {
         notNull: {
@@ -71,7 +71,7 @@ module.exports = (sequelize, DataTypes) => {
           msg: "Product price cannot be empty"
         },
         min: {
-          args: "0",
+          args: [0],
           msg: "Price must be greater than 0"
         }
       }
@@ -93,7 +93,7 @@ module.exports = (sequelize, DataTypes) => {
           msg: "Product stock cannot be empty"
         },
         min: {
-          args: "0",
+          args: [0],
           msg: "Stock must be greater than 0"
         }
       }
