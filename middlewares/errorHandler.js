@@ -1,5 +1,5 @@
 module.exports = (err, req, res, next) => {
-  console.log('error handlers', err)
+  // console.log('error handlers', err)
   let status = 500
   let errObj = {
     msg: "Internal Server Error"
@@ -36,6 +36,12 @@ module.exports = (err, req, res, next) => {
   } else if (err.name === 'outofstock') {
     status = 400
     errObj.msg = "Sorry, we're running out of stock"
+  } else if (err.name === 'vouchernotfound') {
+    status = 404
+    errObj.msg = "Invalid voucher code"
+  } else if (err.name === 'nothingprocessed') {
+    status = 500
+    errObj.msg = "An error occurred. Please refresh this website"
   }
 
   res
