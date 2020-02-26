@@ -75,11 +75,86 @@ module.exports = {
       })
   },
 
+  // checkedOut(req, res, next) {
+  //   const { id } = req.params
+  //   const { checkout } = req.body
+  //   Cart.update({
+  //     checkout
+  //   }, { where: { id } })
+  // }
   checkedOut(req, res, next) {
-    const { id } = req.params
-    const { checkout } = req.body
-    Cart.update({
-      checkout
-    }, { where: { id } })
+    const id = req.currentUserId
+
+    Cart.findAll({ attributes: ['id', 'ProductId', 'quantity'], where: { UserId: id, checkout: false } })
+      .then(products => {
+        let arrPromise = []
+        let arrQuantity = []
+
+        for (let i = 0; i < products.length; i++) {
+          const promise = Product.findOne({ where: { id: products[i].ProductId } })
+          const qty = products[i].quantity
+          arrPromise.push(promise)
+          arrQuantity.push(qty)
+        }
+
+        Promise.all(arrPromise)
+          .then(values => {
+            let willUpdate = true
+            let arrStock = []
+            for (let i = 0; i < values.length; i++) {
+              arrStock.push(values[i].stock)
+              if (values[i].stock < arrQuantity[i]) {
+                willUpdate = false
+              }
+            }
+            return { arrStock, willUpdate }
+          })
+
+          .then(data => {
+            if (data.willUpdate) {
+              
+              let arrWillUpdate = []
+              for (let i = 0; i < products.length; i++) {
+
+                const promise1 = Cart.update({
+                  checkout: true
+                }, { where: { id: products[i].id } })
+
+                const newStock = data.arrStock[i] - arrQuantity[i]
+                const promise2 = Product.update({
+                  stock: newStock
+                }, { where: { id: products[i].ProductId } })
+
+                arrWillUpdate.push(promise1, promise2)
+              }
+
+              Promise.all(arrWillUpdate)
+                .then(values => {
+                  let success
+                  if (values.length > 0) {
+                    success = true
+                  } else {
+                    success = false
+                  }
+                  values.forEach(value => {
+                    if (value[0] !== 1) success = false
+                  })
+                  if (success) {
+                    res
+                      .status(200)
+                      .json({ msg: "Checkout success" })
+                  } else {
+                    next({ name: "nothingprocessed" })
+                  }
+                })
+                .catch(next)
+            } else {
+              next({ name: "outofstock" })
+            }
+          })
+          .catch(next)
+      })
+      .catch(next)
   }
 }
+
