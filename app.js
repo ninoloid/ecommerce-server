@@ -11,23 +11,33 @@ const cors = require('cors')
 // CRON JOB
 const CronJob = require('cron').CronJob;
 const moment = require('moment');
-const { Cart } = require('./models')
+const { Cart, Product } = require('./models')
 const { Op } = require('sequelize')
 moment().format()
 
 const job = new CronJob('0 */15 * * * *', function () {
-  Cart.destroy({ where: { 
+  Cart.findAll({ 
+    attributes: ['id', 'ProductId', 'quantity'],
+    where: { 
     createdAt: {
       [Op.lte] : moment().subtract(1, 'hours').toDate()
     },
-    checkout: false
+    checkout: true
   } })
-    .then(() => {
-      console.log('Cart deleted')
-    })
-    .catch(() => {
-      console.log('Failed to delete cart')
-    })
+  .then(products => {
+    if (products.length >= 1) {
+      products.forEach(product => {
+
+        Product.increment({
+          stock: product.quantity
+        }, { 
+          where: { id: product.ProductId }
+        })
+
+        Cart.destroy({ where: { id: product.id } })
+      })
+    }
+  })
   }, null, true, 'Asia/Jakarta');
 job.start();
 // END OF CRON JOB
