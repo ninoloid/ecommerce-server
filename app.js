@@ -25,6 +25,9 @@ const job = new CronJob('0 */15 * * * *', function () {
     .then(() => {
       console.log('Cart deleted')
     })
+    .catch(() => {
+      console.log('Failed to delete cart')
+    })
   }, null, true, 'Asia/Jakarta');
 job.start();
 // END OF CRON JOB
