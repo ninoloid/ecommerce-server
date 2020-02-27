@@ -1,0 +1,19 @@
+{
+  "production": {
+    "use_env_variable": "DATABASE_URL"
+  },
+  "development": {
+    "username": "ninoloid",
+    "password": "ninoloid",
+    "database": "db_ecommerce",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "testing": {
+    "username": "ninoloid",
+    "password": "ninoloid",
+    "database": "db_ecommerce_test",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  }
+}
