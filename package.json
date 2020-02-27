@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node bin/http.js",
     "test": "NODE_ENV=testing jest --runInBand --detectOpenHandles",
-    "dev": "NODE_ENV=development nodemon bin/http.js"
+    "dev": "NODE_ENV=development nodemon bin/http.js",
+    "reset": "sequelize db:migrate:undo:all && sequelize db:migrate && sequelize db:seed:all"
   },
   "author": "Ahmad MSA",
   "license": "ISC",

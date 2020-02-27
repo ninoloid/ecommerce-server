@@ -2,18 +2,19 @@ const { Cart, User, Product } = require('../models')
 
 module.exports = {
   addToCart(req, res, next) {
-    const { ProductId, checkout } = req.body
+    console.log('aaaaaaaaaaaaaaaa', req.body.type)
+    const { ProductId, type } = req.body
     const UserId = req.currentUserId 
     
     Cart.findOrCreate({
       where: {
         UserId,
         ProductId,
-        checkout
+        checkout: false
       },
         UserId,
         ProductId,
-        checkout
+        checkout: false
     })
       .then(product => {
         if (product[0].id) {
@@ -24,7 +25,13 @@ module.exports = {
           Product.findOne({ where: { id: ProductId } })
           .then(item => {
             const quantity = item.stock
-            const newQty = product[0].quantity + 1
+            let newQty
+            console.log('tipenya', type)
+            if (type === 'add') {
+              newQty = product[0].quantity + 1
+            } else {
+              newQty = product[0].quantity - 1
+            }
             if (quantity >= newQty) {
               Cart.update({
                 quantity: newQty

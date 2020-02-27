@@ -1,5 +1,5 @@
 module.exports = (err, req, res, next) => {
-  console.log('error handlers', err)
+  // console.log('error handlers', err)
   let status = 500
   let errObj = {
     msg: "Internal Server Error"
