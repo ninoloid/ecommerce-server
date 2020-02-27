@@ -63,8 +63,9 @@ module.exports = {
   },
 
   deleteFromCart(req, res, next) {
-    const { id } = req.params
-    Cart.destroy({ where: { id } })
+    const { UserId, ProductId } = req.body
+    const checkout = false
+    Cart.destroy({ where: { UserId, ProductId, checkout } })
       .then(() => {
         res
           .status(200)
@@ -75,13 +76,6 @@ module.exports = {
       })
   },
 
-  // checkedOut(req, res, next) {
-  //   const { id } = req.params
-  //   const { checkout } = req.body
-  //   Cart.update({
-  //     checkout
-  //   }, { where: { id } })
-  // }
   checkedOut(req, res, next) {
     const id = req.currentUserId
 
